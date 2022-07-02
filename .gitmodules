@@ -1,0 +1,6 @@
+[submodule "hua-api"]
+	path = hua-api
+	url = git@github.com:ba055482/hua-api.git
+[submodule "hua-ui"]
+	path = hua-ui
+	url = git@github.com:ba055482/hua-ui.git
