@@ -45,7 +45,7 @@ The `api-clip.yaml` is the ClusterIP Service file.
 
 Once the mentioned Secrets are created, apply the api-* YAML files by running:
 ```bash
-kubectl apply -f api-<file>.yaml
+kubectl apply -f api-<name>.yaml
 ```
 
 > **Note:** Detailed information for the creation of Secret `dockerconfigjson-github-com` can be found at the official [GitHub documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
@@ -63,6 +63,12 @@ To completely deploy our application and enable it to handle HTTPS requests, fur
 - File `ui-ingress-ssl.yaml` defines an Ingress resource.  
 It enables HTTPS connections by configuring SSL/TLS on production host [huademo.gotdns.ch](https://huademo.gotdns.ch).  
 It also serves as the main Ingress resource, by accepting requests to production host at port 80 and forwarding them either to frontend **ui** or to backend **api** pods. The mapping is based on the HTTP request path, with those that contain "/api" being forwarded to the backend pod.  
+
+Apply the ui-* YAML files by running:
+
+```bash
+kubectl apply -f ui-<name>.yaml
+```
 
 > **Note:** To enable SSL/TLS an existing certificate manager implementation that can be installed with `helm` was selected. You can install it by running:  
 `helm3 install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.8.0`
