@@ -11,7 +11,7 @@ For the deployment we used `microk8s` with `kubectl` and `helm`.
 
 You can run the environment by deploying the services described in `docker-compose.yaml`. There are 4 services defined in this file. The additional **ingress** service manages the **api** and **ui** components to be deployed under the same host. 
 
-__Important Note:__ This way of deploying the components is for testing purposes only and it is not fully functional. Certs errors are encountered with the addition of **ingress** component.  
+> __Important Note:__ This way of deploying the components is for testing purposes only and it is not fully functional. Certs errors are encountered with the addition of **ingress** component.  
 
 Deploy the services in the following order:
 1. db

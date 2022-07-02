@@ -25,7 +25,7 @@ kubectl create secret generic hua-secret --from-literal=db_user='mydbuser' --fro
 # create secret for db init sql script
 kubectl create secret generic hua-secret-sql --from-file=path/to/init.sql
 ```
-**Note:** The database is not initialized automatically on creation. A manual step needs to be performed and run the init SQL script `hua-secret-sql`.
+> **Note:** The database is not initialized automatically on creation. A manual step needs to be performed and run the init SQL script `hua-secret-sql`.
 
 
 ## Backend (api)
@@ -48,12 +48,21 @@ Once the mentioned Secrets are created, apply the api-* YAML files by running:
 kubectl apply -f api-<file>.yaml
 ```
 
-**Note:** Detailed information for the creation of Secret `dockerconfigjson-github-com` can be found on official [GitHub documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
+> **Note:** Detailed information for the creation of Secret `dockerconfigjson-github-com` can be found at the official [GitHub documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
 
 
 ## Frontend (ui)
 
+The frontend component is an Angular web application. It is deployed on a NGINX web server.  
+Deploying the standalone component is simple, running `kubectl apply -f ui-deployment.yaml` will create a Deployment running the image which is publicly available on DockerHub.  
+The application is deployed on container port 80. 
 
+To completely deploy our application and enable it to handle HTTPS requests, further configuration is needed:
 
+- File `ui-clip.yaml` defines a LoadBalancer (Service) for the frontend application.
+- File `ui-ingress-ssl.yaml` defines an Ingress resource.  
+It enables HTTPS connections by configuring SSL/TLS on production host [huademo.gotdns.ch](https://huademo.gotdns.ch).  
+It also serves as the main Ingress resource, by accepting requests to production host at port 80 and forwarding them either to frontend **ui** or to backend **api** pods. The mapping is based on the HTTP request path, with those that contain "/api" being forwarded to the backend pod.  
 
-
+> **Note:** To enable SSL/TLS an existing certificate manager implementation that can be installed with `helm` was selected. You can install it by running:  
+`helm3 install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.8.0`
