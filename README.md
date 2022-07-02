@@ -3,7 +3,9 @@ Where backend meets frontend meets DevOps.
 
 ## Project information
 
-The front-end (ui) and back-end (api) components are linked as submodules in this project. The solid way of deploying them is using Kubernetes. An alternative way of running and performing quick tests is to use the `docker-compose` option.
+The frontend (ui) and backend (api) components are linked as submodules in this project. The solid way of deploying them is using Kubernetes. An alternative way of running and performing quick tests is to use the `docker-compose` option.
+
+For the deployment we used `microk8s` with `kubectl` and `helm`.
 
 ## Run with `docker-compose`
 
@@ -23,6 +25,6 @@ The best approach is to create the cluster resources by applying the configurati
 
 ## Improvements
 
-*How can this git project be updated automatically when a submodule is updated?*  
+*- How can this git project be updated automatically when a submodule is updated?*  
 A feature like this can be implemented on the CI solution. A successful commit & build of either **ui** or **api** repo could trigger a job to update this git project.  
 
