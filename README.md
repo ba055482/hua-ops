@@ -26,5 +26,5 @@ The best approach is to create the cluster resources by applying the configurati
 ## Improvements
 
 *- How can this git project be updated automatically when a submodule is updated?*  
-A feature like this can be implemented on the CI solution. A successful commit & build of either **ui** or **api** repo could trigger a job to update this git project.  
+A feature like this can be implemented on the CI solution only if a Jenkinsfile is created and a new Pipeline is added for the current project. The idea is that a successful commit & build of either **ui** or **api** repo could trigger a job to update this git project.  
 
