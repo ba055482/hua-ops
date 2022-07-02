@@ -1,0 +1,68 @@
+version: '2'
+services:
+
+  db:
+    image: bitnami/postgresql:latest
+    container_name: db
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=dbuser
+      - POSTGRES_DB=huadb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dbuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data/'
+      - './init.sql:/docker-entrypoint-initdb.d/init.sql'
+
+
+  api:
+    build:
+      context: ./hua-api
+      dockerfile: hua-api.Dockerfile
+    container_name: api
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/huadb
+      - SPRING_DATASOURCE_USERNAME=dbuser
+      - SPRING_DATASOURCE_PASSWORD=dbuser
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+      - VIRTUAL_HOST=huademo.gotdns.ch
+      - VIRTUAL_PATH=/api
+    ports:
+      - "8081:8080"
+    # depends_on:
+    #   - hua-db
+    # # command: ["./wait-for-db.sh", "db:5432", "--", "python", "app.py"]
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://hua-db:5432"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+  
+
+  ui:
+    build:
+      context: ./hua-ui
+      dockerfile: hua-ui.Dockerfile
+    container_name: ui
+    ports:
+      - "8082:8080"
+    environment:
+      - VIRTUAL_HOST=huademo.gotdns.ch
+  
+
+  ingress:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+volumes:
+  pgdata:
